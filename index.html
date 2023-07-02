@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Text to Morse Code Generator</title>
+  <title>Morse Code Converter</title>
   <style>
     body {
       background-color: #222;
@@ -60,20 +60,27 @@
 </head>
 <body>
   <div class="container">
-    <h1>Text to Morse Code Generator</h1>
+    <h1>Morse Code Converter</h1>
     
     <label for="text">Enter Text:</label>
     <textarea id="text" placeholder="Enter text"></textarea>
     
-    <button onclick="convert()">Convert to Morse Code</button>
-    
+    <button onclick="convertToMorse()">Convert to Morse Code</button>
     
     <label for="result">Morse Code:</label>
-    <div id="result"></div>
+    <div id="morseResult"></div>
+    
+    <label for="morse">Enter Morse Code:</label>
+    <textarea id="morse" placeholder="Enter Morse code"></textarea>
+    
+    <button onclick="convertToText()">Convert to Text</button>
+    
+    <label for="result">Text:</label>
+    <div id="textResult"></div>
   </div>
   
   <script>
-    function convert() {
+    function convertToMorse() {
       var text = document.getElementById('text').value;
       var morseCode = "";
       
@@ -87,7 +94,34 @@
         }
       }
       
-      document.getElementById('result').innerHTML = morseCode;
+      document.getElementById('morseResult').innerHTML = morseCode;
+    }
+    
+    function convertToText() {
+      var morseCode = document.getElementById('morse').value;
+      var text = "";
+      
+      var words = morseCode.split('/');
+      for (var i = 0; i < words.length; i++) {
+        var word = words[i].trim();
+        if (word !== '') {
+          var letters = word.split(' ');
+          for (var j = 0; j < letters.length; j++) {
+            var code = letters[j];
+            var char = getKeyByValue(MORSE_CODE, code);
+            if (char) {
+              text += char;
+            }
+          }
+          text += ' ';
+        }
+      }
+      
+      document.getElementById('textResult').innerHTML = text;
+    }
+    
+    function getKeyByValue(object, value) {
+      return Object.keys(object).find(key => object[key] === value);
     }
     
     const MORSE_CODE = {
